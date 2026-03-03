@@ -1,0 +1,42 @@
+package ru.molchanov.demo.rate;
+
+
+import org.springframework.stereotype.Service;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class RateService  {
+    private final RateRepository rateRepository;
+
+    public RateService(RateRepository rateRepository) {
+        this.rateRepository = rateRepository;
+
+    }
+
+    public Rate saveRate(Rate rate) {
+        rate.setUpdatedAt(Instant.now());
+        return rateRepository.save(rate);
+    }
+
+    public Optional<Rate> findByCurrencyCodeAndDate(String code, LocalDate RateDate) {
+        return rateRepository.findByCurrencyCodeAndRateDate(code, RateDate);
+    }
+
+    public List<Rate> findAll() {
+        return rateRepository.findAll();
+    }
+
+    public List<Rate> findByCodeSortedByUpdatedAtDesc(String code) {
+        return rateRepository.findAll()
+                .parallelStream()
+                .filter(r -> r.getCurrencyCode() != null && r.getCurrencyCode().equalsIgnoreCase(code))
+                .sorted(Comparator.comparing(Rate::getUpdatedAt).reversed())
+                .collect(Collectors.toList());
+    }
+}
