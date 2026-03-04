@@ -1,7 +1,4 @@
-Запустить приложение
-Через IDE (Run main класса) или:
 
-mvn spring-boot:run
 
 Приложение стартует на:
 
@@ -41,3 +38,6 @@ http://localhost:8080/rates/by-date-currency?code=USD&date=2026-03-04
 http://localhost:8080/rates/filter?code=USD
 
 Данные возвращаются отсортированными по updatedAt (по убыванию).
+
+Проверить H2
+http://localhost:8080/h2-console
