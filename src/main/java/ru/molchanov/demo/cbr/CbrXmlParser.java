@@ -6,10 +6,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CbrXmlParser {
 
-    public ParsedRate parseOne(String xml, String targetCode) {
+    public Map<String, ParsedRate> parseAll(String xml) {
+        Map<String, ParsedRate> result = new HashMap<>();
+
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -27,28 +31,30 @@ public class CbrXmlParser {
                         .item(0)
                         .getTextContent();
 
-                if (code.equals(targetCode)) {
+                String nominalStr = element.getElementsByTagName("Nominal")
+                        .item(0)
+                        .getTextContent();
 
-                    String nominalStr = element.getElementsByTagName("Nominal")
-                            .item(0)
-                            .getTextContent();
+                String valueStr = element.getElementsByTagName("Value")
+                        .item(0)
+                        .getTextContent()
+                        .replace(",", ".");
 
-                    String valueStr = element.getElementsByTagName("Value")
-                            .item(0)
-                            .getTextContent()
-                            .replace(",", ".");
+                int nominal = Integer.parseInt(nominalStr);
+                BigDecimal value = new BigDecimal(valueStr);
 
-                    int nominal = Integer.parseInt(nominalStr);
-                    BigDecimal value = new BigDecimal(valueStr);
-
-                    return new ParsedRate(code, nominal, value);
-                }
+                result.put(code, new ParsedRate(code, nominal, value));
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
+        return result;
+    }
+
+    // старый метод оставляем (если где-то используется)
+    public ParsedRate parseOne(String xml, String targetCode) {
+        return parseAll(xml).get(targetCode);
     }
 }

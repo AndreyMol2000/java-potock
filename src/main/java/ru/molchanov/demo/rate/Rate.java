@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "rates")
 public class Rate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,31 +23,57 @@ public class Rate {
     private int nominal;
 
     private Instant updatedAt;
+
     public Rate() {
     }
 
-    public Long getId() { return id; }
-    public String getCurrencyCode() { return currencyCode; }
-    public LocalDate getRateDate() { return rateDate; }
-    public BigDecimal getRateValue() { return rateValue; }
-    public int getNominal() { return nominal; }
-    public Instant getUpdatedAt() { return updatedAt; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public LocalDate getRateDate() {
+        return rateDate;
+    }
+
+    public BigDecimal getRateValue() {
+        return rateValue;
+    }
+
+    public int getNominal() {
+        return nominal;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
 
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
     }
+
     public void setRateDate(LocalDate rateDate) {
         this.rateDate = rateDate;
     }
 
+
+    public void setRateValue(BigDecimal rateValue) {
+        this.rateValue = rateValue;
+    }
+
+
     public void setValue(BigDecimal rateValue) {
         this.rateValue = rateValue;
     }
+
     public void setNominal(int nominal) {
         this.nominal = nominal;
     }
 
-    public void setUpdatedAt(Instant now) {
-        this.updatedAt = now;
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
